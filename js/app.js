@@ -30,10 +30,10 @@ function home(){
   const P=D.packages, nI=P.filter(p=>p.part==='I').length, nII=P.length-nI;
   const mosaic=P.slice(0,24).map(p=>p.images[0]).filter(Boolean).map(i=>`<img src="${T(i.key)}" alt="" loading="lazy">`).join('');
   app.innerHTML=`
-  <section class="hero"><div class="mos">${mosaic}</div><div class="shade"></div>
+  <section class="hero"><a class="covimg" href="downloads/Novaflow_Figure_Booklet_share.pdf" title="Download the booklet PDF"><img src="assets/cover.jpg" alt="The Figure Booklet cover"></a>
    <div class="wrap"><div class="in">
     <div class="kicker">Neuro-omics · 2023–26 · systematic review</div>
-    <h1>The <span class="a">figure</span><br>packages behind<br><span class="n">neuro-omics.</span></h1>
+    <h1>The <span class="a">Figure</span><br><span class="n">Booklet.</span></h1>
     <p class="dek">The plotting packages and analysis tools used in neuroscience bulk, single-cell and spatial omics papers, ranked by how many papers name them in their methods. Every figure here was recreated with runnable code. Click any figure to open it full screen.</p>
     <div class="stats">
      <div class="stat" style="--c:var(--blue)"><b>17,768</b><span>open-access papers, 2023–26 (Europe PMC)</span></div>
@@ -140,7 +140,7 @@ function pkgPage(dir){
   $('#cp').onclick=()=>{navigator.clipboard.writeText(p.code||'').then(()=>toast('Copied to clipboard'),()=>toast('Copy failed'))};
   const items=p.images.map(im=>({p,im}));
   $$('.gal .fig').forEach(f=>f.onclick=()=>openLB(items,+f.dataset.k));
-  document.title=`${p.name} · Novaflow Figure-Package Atlas`;
+  document.title=`${p.name} · The Figure Booklet · Novaflow`;
 }
 
 /* ---------------- GALLERY ---------------- */
@@ -154,7 +154,7 @@ function gallery(){
     $('#ms').innerHTML=cur.map((x,k)=>`<div class="fig" data-k="${k}"><div class="im"><img src="${T(x.im.key)}" width="${x.im.w}" height="${x.im.h}" style="height:auto" alt="" loading="lazy"></div><div class="c"><b>${esc(x.p.name)}</b><span>${esc(prettyVar(x.im.var))}</span></div></div>`).join('');
     $$('#ms .fig').forEach(f=>f.onclick=()=>openLB(cur,+f.dataset.k));};
   $$('#gt .chip').forEach(b=>b.onclick=()=>{$$('#gt .chip').forEach(c=>c.classList.toggle('on',c===b));draw(b.dataset.t)});
-  draw('');document.title='Gallery · Novaflow Figure-Package Atlas';
+  draw('');document.title='Gallery · The Figure Booklet · Novaflow';
 }
 
 /* ---------------- TABLES ---------------- */
@@ -169,7 +169,7 @@ function tables(){
   <div class="sech"><h2>Niche &amp; cool · ${D.niche.length} tools</h2></div>${mk('t2',T2,D.niche,'tool')}</div></div>`;
   $$('table').forEach(tb=>$$('th',tb).forEach(th=>th.onclick=()=>{const k=+th.dataset.k,b=$('tbody',tb),rs=[...b.rows];const asc=th.dataset.s!=='a';$$('th',tb).forEach(x=>delete x.dataset.s);th.dataset.s=asc?'a':'d';
     rs.sort((x,y)=>{const a=x.cells[k].textContent,c=y.cells[k].textContent,na=parseFloat(a.replace(/,/g,'')),nc=parseFloat(c.replace(/,/g,''));const r=!isNaN(na)&&!isNaN(nc)?na-nc:a.localeCompare(c);return asc?r:-r});rs.forEach(r=>b.appendChild(r))}));
-  document.title='Rankings · Novaflow Figure-Package Atlas';
+  document.title='Rankings · The Figure Booklet · Novaflow';
 }
 
 /* ---------------- METHODS ---------------- */
@@ -179,7 +179,7 @@ function methods(){
     const cav=`<div class="caveat" style="margin-bottom:26px"><b>Caveats.</b> The corpus is open-access full text only, so paywalled papers are missed. A Methods mention shows a package was used, not that it drew a given published figure. Niche-tool growth ratios come from small counts. The recreations use public demo data (airway, Zeisel 2015 and others listed below), and deepTools uses simulated bigWigs.</div>`;
     const r=t=>window.marked?marked.parse(t):`<pre>${esc(t)}</pre>`;
     $('#md').innerHTML=cav+r(m)+'<hr style="border-color:#1b2330;margin:40px 0">'+r(s);});
-  document.title='Methods · Novaflow Figure-Package Atlas';
+  document.title='Methods · The Figure Booklet · Novaflow';
 }
 
 /* ---------------- LIGHTBOX ---------------- */

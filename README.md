@@ -1,4 +1,4 @@
-# Novaflow · Figure-Package Atlas (neuro-omics 2023–26)
+# Novaflow · The Figure Booklet (neuro-omics 2023–26)
 
 **Live:** https://logan196.github.io/novaflow-figure-booklet/
 
