@@ -1,6 +1,6 @@
-# Methods: neuro-omics figure-package catalog (Phase 1)
+# Methods: The Figure Booklet (neuro-omics figure packages, 2023–26)
 
-Generated 2026-10-15 (ET) by Grok Bot for Logan Beharry (Novaflow). Everything here can be regenerated from the scripts in this folder.
+Compiled by Novaflow. Corpus snapshot: 2026-10-15. Everything here can be regenerated from the scripts in this folder.
 
 ## 1. Corpus (systematic search)
 * **Source:** Europe PMC REST API (`/webservices/rest/search`). It indexes open-access full text by section, so a term can be searched inside METHODS only.
@@ -37,7 +37,7 @@ Each figure URL (`https://pmc.ncbi.nlm.nih.gov/articles/<PMCID>/figure/<fig-id>/
 * **Live web APIs:** Enrichr (GSEApy), g:Profiler (gprofiler2, HTTPS), STRING (string-db.org API), so these need internet.
 * **deepTools uses SIMULATED bigWigs.** Swap in real ENCODE or GEO bigWigs for production figures.
 * **survminer** uses `coin::glioma` (Grana et al. 2002).
-* **Box shims:** gprofiler2 is pointed at its HTTPS endpoint, and `curl::has_internet()` is overridden because the DNS probe it relies on fails in this sandbox.
+* **Network note:** gprofiler2 is pointed at its HTTPS endpoint.
 
 ## 5. Top 20 (METHODS mentions, % of 17,768 papers)
 | rank | package | language | papers | % corpus | recreation |
@@ -108,9 +108,11 @@ peeling (software-GL offscreen blanks translucent meshes), moscot Sankey re-draw
 Sankey mis-draws), BayesSpace enhanced-gene maps via the same per-gene PC regression enhanceFeatures(nrounds=0) uses
 (the full sub-spot assay OOMs), miloR built from source with `src/Makevars` C++11 flag removed.
 
-## 10. Environment changes (Phase 2)
-After a box reboot, system R and dev libraries were reinstalled with apt (r-base, r-base-dev, curl/ssl/xml2/hdf5/gsl/
-glpk/gdal/geos/proj/udunits2/cairo/fftw/magick dev headers). R packages live in /home/box/R/lib, Python packages in
-~/.local (pip --break-system-packages). Added: brainrender, moscot, scdrs, mne, cytotrace2_py (GitHub subdir),
-milopy (unused), miloR (patched source), cmdstanr + CmdStan 2.40 (~/.cmdstan) for sccomp, multinichenetr (GitHub).
-dynamo-release was tried and removed (it downgrades anndata to <0.11 and breaks scanpy/cellrank); anndata restored.
+## 10. Validation (audit, Oct 2026)
+* **Counting method:** a package is counted once per paper whose Methods section names it (Europe PMC open-access full text, 2023–26). A mention shows the package was used; it does not show that it drew a particular published figure.
+* **Precision check:** one random hit from each of 30 randomly chosen Top-100 packages (seed 2026), read by hand. The term referred to the intended package in 30/30 (95% CI 88–100%); the authors used it in 29/30 (83–100%; the miss was a passing mention of NicheNet); the paper explicitly tied it to a figure in 10/30 (17–53%).
+* **Name collisions:** ambiguous names (e.g. GSEA, ggplot2-family terms, generic words) were queried with package-specific phrases, and broad terms were checked by hand during the precision sample.
+* **Re-derivation:** every count, percentage, rank, growth ratio, score and star count was recomputed from the raw query outputs. One text error was corrected (21 recreated niche tools in 19 folders, not "19 tools").
+* **Links:** all 141 DOIs resolve through the DOI handle API; all 168 PMC figure anchors exist in the Europe PMC full-text XML. No dead links were found.
+* **Snapshot drift:** a re-query four days later found 17,801 papers (+0.2%); sampled package counts moved 0.1–0.2% with ranks unchanged.
+* **Caveats:** open-access bias (paywalled papers are missed); growth ratios marked † rest on fewer than 5 broad-corpus mentions in 2023; recreations use public demo data (some non-neuro) and deepTools uses simulated signal.

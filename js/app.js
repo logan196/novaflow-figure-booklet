@@ -34,7 +34,8 @@ function home(){
    <div class="wrap"><div class="in">
     <div class="kicker">Neuro-omics · 2023–26 · systematic review</div>
     <h1>The <span class="a">Figure</span><br><span class="n">Booklet.</span></h1>
-    <p class="dek">The plotting packages and analysis tools used in neuroscience bulk, single-cell and spatial omics papers, ranked by how many papers name them in their methods. Every figure here was recreated with runnable code. Click any figure to open it full screen.</p>
+    <p class="dek">The plotting packages and analysis tools named in neuroscience bulk, single-cell and spatial omics papers, ranked by how many papers name them in their methods. Every figure here is a Novaflow recreation on public or synthetic data, with runnable code. Click any figure to open it full screen.</p>
+    <div class="caveat" style="margin-top:14px"><b>Work with Novaflow.</b> Send us your data and ask any question. We return publication-ready figures, analysis and comparisons with public datasets, for a fraction of the cost of a typical core-facility or contract bioinformatics service. <a href="mailto:logan@novaflow.ai">logan@novaflow.ai</a> · <a href="https://calendly.com/logan-novaflowapp/30min" target="_blank" rel="noopener">Book a 30-minute call ↗</a></div>
     <div class="stats">
      <div class="stat" style="--c:var(--blue)"><b>17,768</b><span>open-access papers, 2023–26 (Europe PMC)</span></div>
      <div class="stat" style="--c:var(--vio)"><b>${P.length}</b><span>packages profiled: ${nI} mainstream + ${nII} niche</span></div>
@@ -70,7 +71,7 @@ function filtered(){
 function card(p,k){
   const i=p.images[0], ii=p.part==='II';
   const maxP=D.packages[0].top?.papers||1;
-  const big=ii?`<b>${p.niche?.growth!=null?p.niche.growth.toFixed(1)+'×':'—'}</b><span>growth in usage rate, 2023 → 2025–26</span>`
+  const big=ii?`<b>${p.niche?.growth!=null?p.niche.growth.toFixed(1)+'×':'—'}</b><span>growth in mention rate, 2023 → 2025–26</span>`
               :`<b>${fmt(p.top?.papers)}</b><span>papers · ${p.top?.pct}% of corpus</span>`;
   const w=ii?Math.min(100,(p.niche?.pctile||0)*100):Math.max(2,100*(p.top?.papers||0)/maxP);
   return `<a class="card" href="#/p/${encodeURIComponent(p.dir)}" style="animation-delay:${Math.min(k,24)*25}ms">
@@ -105,9 +106,9 @@ function pkgPage(dir){
   const p=D.packages.find(x=>x.dir===dir); if(!p){app.innerHTML='<div class="loading">Package not found. <a href="#/">Back</a></div>';return}
   const ii=p.part==='II', t=p.top, n=p.niche;
   const kp=ii?[
-    [n?.growth!=null?n.growth.toFixed(1)+'×':'—','growth ratio (broad usage rate 2025–26 vs 2023)'],
-    [n?.r23!=null?n.r23.toFixed(3):'—','usage per 1k papers, 2023'],
-    [n?.r2526!=null?n.r2526.toFixed(3):'—','usage per 1k papers, 2025–26'],
+    [n?.growth!=null?n.growth.toFixed(1)+'×':'—','growth ratio (broad mention rate 2025–26 vs 2023)'+(p.lowbase?' †':'')],
+    [n?.r23!=null?n.r23.toFixed(3):'—','mentions per 1k papers, 2023'],
+    [n?.r2526!=null?n.r2526.toFixed(3):'—','mentions per 1k papers, 2025–26'],
     [fmt(n?.neuro_total),'neuro-corpus papers (2023–26)'],
     [n?.stars!=null?fmt(n.stars):'—','GitHub stars'],
     [p.images.length,'recreated variations']]
@@ -129,11 +130,12 @@ function pkgPage(dir){
   <div class="cols"><div>
    ${bestFor?`<div class="panel"><h4>Best for</h4><p>${esc(bestFor)}</p></div>`:''}
    ${p.header?`<div class="panel"><h4>What the recreation shows</h4><p>${esc(p.header)}</p></div>`:''}
+   <div class="caveat" style="margin:12px 0"><b>Novaflow recreation.</b> Data: ${esc(p.datasrc||'see script')}. Recreated by Novaflow from the script below; not reproduced from the example papers.${p.lowbase?' † Growth ratio rests on fewer than 5 broad-corpus mentions in 2023, so it mostly reflects a new release, not a measured trend.':''}</div>
    ${spark}
    <div class="code"><div class="bar2"><span>${esc(p.script_src||'')}${p.code_line?` · from line ${p.code_line}`:''}</span><span class="act"><button class="btn" id="cp">Copy</button>${p.script?`<a class="btn" href="${esc(p.script)}" target="_blank">Full script ↗</a>`:''}</span></div><pre><code>${hl(p.code||'',p.lang)}</code></pre></div>
    ${p.limits.length?`<div class="panel" style="margin-top:18px"><h4 style="color:var(--amb)">Limitations &amp; notes</h4><ul class="lim">${p.limits.map(l=>`<li>${esc(l)}</li>`).join('')}</ul></div>`:''}
    ${t?.note?`<div class="caveat" style="margin-top:12px"><b>Note:</b> ${esc(t.note)}</div>`:''}
-  </div><div><div class="panel"><h4>Example papers (neuro corpus)</h4>${ex}</div></div></div>
+  </div><div><div class="panel"><h4>Example papers (neuro corpus)</h4><p style="margin:0 0 8px;font-size:13px;opacity:.7">Published papers that name the package; their figures are by the authors.</p>${ex}</div></div></div>
   <div class="sech"><h2>Gallery</h2><span class="lbl">${p.images.length} variations · click to enlarge</span></div>
   <div class="gal">${p.images.map((im,k)=>`<div class="fig" data-k="${k}"><div class="im"><img src="${T(im.key)}" alt="${esc(p.name+' '+im.var)}" loading="lazy"></div><div class="c"><b>${esc(prettyVar(im.var))}</b><span>${esc(TY[im.type]?.name||im.type)}</span></div></div>`).join('')}</div>
   <div class="pn">${pv?`<a href="#/p/${encodeURIComponent(pv.dir)}"><span class="lbl">← Previous</span><b>${esc(pv.name)}</b></a>`:'<span></span>'}${nx?`<a class="r" href="#/p/${encodeURIComponent(nx.dir)}"><span class="lbl">Next →</span><b>${esc(nx.name)}</b></a>`:''}</div></div>`;
